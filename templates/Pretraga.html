@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Rezervacija sportskih termina</title>
+
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+</head>
+
+<body>
+
+    <div class="div_1">
+
+        <table>
+            <tr>
+                <th><a href="/">Početna</a></th>
+                <th><a href="/statistika">Statistika</a></th>
+                <th><a href="/pretraga">Pretraga</a></th>
+                <th><a href="/upravljanje">Upravljanje</a></th>
+            </tr>
+        </table>
+
+    </div>
+
+    <h1>Pretraga termina</h1>
+
+    <div class="div_glavni">
+
+        <form method="GET" action="/pretraga">
+
+
+
+            <label>Sport:</label>
+
+            <select name="sport">
+
+                <option>Svi</option>
+
+                <option>Nogomet</option>
+
+                <option>Košarka</option>
+
+                <option>Padel</option>
+
+                <option>Tenis</option>
+
+                <option>Badminton</option>
+
+            </select>
+
+            <br><br>
+
+
+
+            <label>Datum:</label>
+
+            <input type="date" name="datum" min="{{ danas }}">
+
+            <br><br>
+
+            <button type="submit">
+
+                Traži
+
+            </button>
+
+        </form>
+
+
+        <br><br>
+
+
+
+        <table border="1">
+
+            <tr>
+
+                <th>Sport</th>
+
+                <th>Datum</th>
+
+                <th>Vrijeme</th>
+
+                <th>Korisnik</th>
+
+                <th>Cijena</th>
+
+                <th>Status</th>
+
+            </tr>
+
+
+            {% for rezervacija in rezervacije %}
+
+            <tr>
+
+                <td>
+
+                    {{ rezervacija.sport }}
+
+                </td>
+
+                <td>
+
+                    {{ rezervacija.datum.strftime("%d.%m.%Y") }}
+
+                </td>
+
+                <td>
+
+                    {{ rezervacija.vrijeme_od }}
+
+                    -
+
+                    {{ rezervacija.vrijeme_do }}
+
+                </td>
+
+                <td>
+
+                    {{ rezervacija.korisnik }}
+
+                </td>
+
+                <td>
+
+                    {{ rezervacija.cijena }} €
+
+                </td>
+
+                <td style="color:red;">
+
+                    Zauzeto
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+</body>
+
+</html>
