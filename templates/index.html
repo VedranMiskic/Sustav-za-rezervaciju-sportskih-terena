@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Rezervacija sportskih termina</title>
+
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+</head>
+
+<body>
+
+    <div class="div_1">
+
+        <table>
+            <tr>
+                <th><a href="/">Početna</a></th>
+                <th><a href="/statistika">Statistika</a></th>
+                <th><a href="/pretraga">Pretraga</a></th>
+                <th><a href="/upravljanje">Upravljanje</a></th>
+            </tr>
+        </table>
+
+    </div>
+
+    <h1>Rezervacija sportskih termina</h1>
+
+
+    <br><br>
+
+    <div class="div_slike">
+
+        <div class="sport_kartica">
+
+            <img src="{{ url_for('static', filename='images/nogomet.jpg') }}" alt="Nogomet"
+                onclick="openImage(this.src)">
+
+            <h3>⚽ Nogomet</h3>
+
+        </div>
+
+
+        <div class="sport_kartica">
+
+            <img src="{{ url_for('static', filename='images/kosarka.jpg') }}" alt="Kosarka"
+                onclick="openImage(this.src)">
+
+            <h3>🏀 Košarka</h3>
+
+
+
+        </div>
+
+
+        <div class="sport_kartica">
+
+            <img src="{{ url_for('static', filename='images/badminton.jpg') }}" alt="Badminton"
+                onclick="openImage(this.src)">
+
+            <h3>🏸 Badminton</h3>
+
+        </div>
+
+
+        <div class="sport_kartica">
+
+            <img src="{{ url_for('static', filename='images/padel.jpg') }}" alt="Padel" onclick="openImage(this.src)">
+
+            <h3>🎾 Padel</h3>
+
+        </div>
+
+
+        <div class="sport_kartica">
+
+            <img src="{{ url_for('static', filename='images/tenis.jpg') }}" alt="Tenis" onclick="openImage(this.src)">
+
+            <h3>🎾 Tenis</h3>
+
+        </div>
+
+
+    </div>
+
+    <div class="div_glavni">
+
+        <h2>Nova rezervacija</h2>
+
+        <p>Unesite podatke za rezervaciju sportskog termina od ponedjeljka do subote (08:00 - 22:00): </p>
+
+        <div class="div_cjenik">
+
+            <h2>Cjenik:</h2>
+
+            <ul>
+
+                <li>Nogomet: 30 € za 2 sata, 60 € za više od 2 sata</li>
+
+                <li>Košarka: 20 € za 2 sata, 40 € za više od 2 sata</li>
+
+                <li>Padel: 15 € za 2 sata, 30 € za više od 2 sata</li>
+
+                <li>Tenis: 18 € za 2 sata, 36 € za više od 2 sata</li>
+
+                <li>Badminton: 10 € za 2 sata, 20 € za više od 2 sata</li>
+
+            </ul>
+
+        </div>
+
+
+
+        {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+
+        {% for message in messages %}
+
+        <div class="error">
+
+            {{ message }}
+
+        </div>
+
+        {% endfor %}
+
+        {% endif %}
+
+        {% endwith %}
+
+        <form action="/rezervacija" method="POST">
+
+
+            <label for="sport">
+
+                Odaberite sportski teren:
+
+            </label>
+
+            <select id="sport" name="sport">
+
+                <option value="Nogomet">
+                    Nogomet
+                </option>
+
+                <option value="Košarka">
+                    Košarka
+                </option>
+
+                <option value="Padel">
+                    Padel
+                </option>
+
+                <option value="Tenis">
+                    Tenis
+                </option>
+
+                <option value="Badminton">
+                    Badminton
+                </option>
+
+            </select>
+
+            <br><br>
+
+            <label for="datum">
+
+                Datum:
+
+            </label>
+
+            <input type="date" id="datum" name="datum" min="{{ danas }}" required>
+
+            <br><br>
+
+            <label>Vrijeme od:</label>
+
+            <input type="text" id="vrijeme_od" name="vrijeme_od" class="timepicker" required>
+
+            <label> do:</label>
+
+            <input type="text" id="vrijeme_do" name="vrijeme_do" class="timepicker" required>
+
+            <br><br>
+
+            <label for="korisnik">
+
+                Ime korisnika:
+
+            </label>
+
+            <input type="text" id="korisnik" name="korisnik" required>
+
+            <br><br>
+
+            <button type="submit">
+
+                Rezerviraj
+
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="div_drugi">
+
+        <h2>Zauzeti termini</h2>
+
+        <table border="1">
+
+            <tr>
+
+                <th>Sport</th>
+
+                <th>Datum</th>
+
+                <th>Vrijeme</th>
+
+                <th>Korisnik</th>
+
+                <th>Cijena</th>
+
+                <th>Status</th>
+
+            </tr>
+
+            {% for rezervacija in rezervacije %}
+
+            <tr>
+
+                <td>
+                    {{ rezervacija.sport }}
+                </td>
+
+                <td>
+                    {{ rezervacija.datum.strftime("%d.%m.%Y") }}
+                </td>
+
+                <td>
+
+                    {{ rezervacija.vrijeme_od }}
+                    -
+                    {{ rezervacija.vrijeme_do }}
+
+                </td>
+
+                <td>
+                    {{ rezervacija.korisnik }}
+
+                </td>
+
+                <td>
+
+                    {{ rezervacija.cijena }} €
+
+                </td>
+
+                <td style="color:red;">
+                    Zauzeto
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+    <div id="popup">
+
+        <img id="popup-img">
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+
+        flatpickr(".timepicker", {
+
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true,
+            minTime: "08:00",
+            maxTime: "22:00"
+
+        });
+
+        function openImage(src) {
+
+            document.getElementById("popup").style.display = "flex";
+
+            document.getElementById("popup-img").src = src;
+        }
+
+
+        document.getElementById("popup").onclick = function () {
+
+            this.style.display = "none";
+        }
+
+
+    </script>
+
+</body>
+
+</html>
