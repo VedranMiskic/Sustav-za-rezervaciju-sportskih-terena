@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Statistika rezervacija</title>
+
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="div_1">
+
+        <table>
+
+            <tr>
+
+                <th><a href="/">Početna</a></th>
+
+                <th><a href="/statistika">Statistika</a></th>
+
+                <th><a href="/pretraga">Pretraga</a></th>
+
+                <th><a href="/upravljanje">Upravljanje</a></th>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+
+    <h1>Statistika rezervacija</h1>
+
+    <div class="div_glavni">
+
+        <div style="width: 500px; margin: auto;">
+
+            <canvas id="myChart"></canvas>
+
+        </div>
+
+        <h2>
+
+            Ukupan broj rezervacija:
+
+            {{ ukupno }}
+
+        </h2>
+
+        <h2>
+
+            Današnje rezervacije:
+
+            {{ danasnje_rezervacije }}
+
+        </h2>
+
+        <script>
+
+            const nogomet = Number("{{ nogomet }}");
+
+            const kosarka = Number("{{ kosarka }}");
+
+            const padel = Number("{{ padel }}");
+
+            const tenis = Number("{{ tenis }}");
+
+            const badminton = Number("{{ badminton }}");
+
+        </script>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <script>
+
+        const ctx = document.getElementById('myChart');
+
+        new Chart(ctx, {
+
+            type: 'pie',
+
+            data: {
+
+                labels: [
+
+                    'Nogomet',
+
+                    'Košarka',
+
+                    'Padel',
+
+                    'Tenis',
+
+                    'Badminton'
+
+                ],
+
+                datasets: [{
+
+                    data: [
+
+                        nogomet,
+
+                        kosarka,
+
+                        padel,
+
+                        tenis,
+
+                        badminton
+
+                    ],
+
+                    backgroundColor: [
+
+                        "darkslategrey",
+
+                        "steelblue",
+
+                        "seagreen",
+
+                        "gold",
+
+                        "red"
+
+                    ],
+
+                    borderWidth: 1
+
+                }]
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
