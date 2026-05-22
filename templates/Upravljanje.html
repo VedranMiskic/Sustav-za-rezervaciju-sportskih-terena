@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Upravljanje rezervacijama</title>
+
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="div_1">
+
+        <table>
+
+            <tr>
+
+                <th><a href="/">Početna</a></th>
+
+                <th><a href="/statistika">Statistika</a></th>
+
+                <th><a href="/pretraga">Pretraga</a></th>
+
+                <th><a href="/upravljanje">Upravljanje</a></th>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+
+    <h1>Upravljanje rezervacijama</h1>
+
+    <div class="div_glavni">
+
+        <p>Ovdje možete urediti ili obrisati postojeće rezervacije sportskih termina.</p>
+
+        <table border="1">
+
+            <tr>
+
+                <th>Sport</th>
+
+                <th>Datum</th>
+
+                <th>Vrijeme</th>
+
+                <th>Korisnik</th>
+
+                <th>Cijena</th>
+
+                <th>Uređivanje/brisanje</th>
+
+            </tr>
+
+
+            {% for rezervacija in rezervacije %}
+
+            <tr>
+
+                <td>
+
+                    {{ rezervacija.sport }}
+
+                </td>
+
+                <td>
+
+                    {{ rezervacija.datum.strftime("%d.%m.%Y") }}
+
+                </td>
+
+                <td>
+
+                    {{ rezervacija.vrijeme_od }}
+
+                    -
+
+                    {{ rezervacija.vrijeme_do }}
+
+                </td>
+
+                <td>
+
+                    {{ rezervacija.korisnik }}
+
+                </td>
+
+                <td>
+
+                    {{ rezervacija.cijena }} €
+
+                </td>
+
+                <td>
+
+                    <button onclick="otvoriModal(
+
+                    '{{ rezervacija.id }}',
+
+                    '{{ rezervacija.sport }}',
+
+                    '{{ rezervacija.datum }}',
+
+                    '{{ rezervacija.vrijeme_od }}',
+
+                    '{{ rezervacija.vrijeme_do }}',
+
+                    '{{ rezervacija.korisnik }}'
+
+                )">
+
+                        Uredi
+
+                    </button>
+
+                    |
+
+                    <a href="/obrisi/{{ rezervacija.id }}"
+                        onclick="return confirm('Jeste li sigurni da želite obrisati rezervaciju?')">
+
+                        Obriši
+
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+    <div id="modal" class="div_uredivanje_1">
+
+        <div class="div_uredivanje_unutarnji">
+
+            <h2>Uredi rezervaciju</h2>
+
+
+            <form id="editForm" method="POST">
+
+
+
+                <label>Sport:</label>
+
+                <select id="sport" name="sport">
+
+                    <option value="Nogomet">
+                        Nogomet
+                    </option>
+
+                    <option value="Košarka">
+                        Košarka
+                    </option>
+
+                    <option value="Padel">
+                        Padel
+                    </option>
+
+                    <option value="Tenis">
+                        Tenis
+                    </option>
+
+                    <option value="Badminton">
+                        Badminton
+                    </option>
+
+                </select>
+
+                <br><br>
+
+
+
+                <label>Datum:</label>
+
+                <input type="date" id="datum" name="datum" min="{{ danas }}" required>
+
+                <br><br>
+
+
+
+                <label>Vrijeme od:</label>
+
+                <input type="time" id="vrijeme_od" name="vrijeme_od" min="08:00" max="22:00" required>
+
+                <br><br>
+
+
+
+                <label>Vrijeme do:</label>
+
+                <input type="time" id="vrijeme_do" name="vrijeme_do" min="08:00" max="22:00" required>
+
+                <br><br>
+
+
+
+                <label>Korisnik:</label>
+
+                <input type="text" id="korisnik" name="korisnik" required>
+
+                <br><br>
+
+
+                <button type="submit">
+
+                    Spremi promjene
+
+                </button>
+
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        function otvoriModal(
+
+            id,
+
+            sport,
+
+            datum,
+
+            vrijeme_od,
+
+            vrijeme_do,
+
+            korisnik
+
+        ) {
+
+            document.getElementById("modal").style.display = "block";
+
+
+            document.getElementById("sport").value = sport;
+
+            document.getElementById("datum").value = datum;
+
+            document.getElementById("vrijeme_od").value = vrijeme_od;
+
+            document.getElementById("vrijeme_do").value = vrijeme_do;
+
+            document.getElementById("korisnik").value = korisnik;
+
+
+            document.getElementById("editForm").action =
+
+                "/spremi_izmjene/" + id;
+        }
+
+
+
+        window.onclick = function (event) {
+
+            const modal = document.getElementById("modal");
+
+            if (event.target == modal) {
+
+                modal.style.display = "none";
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
