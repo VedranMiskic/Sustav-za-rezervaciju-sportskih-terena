@@ -1,11 +1,13 @@
-FROM python:3.12
+FROM python:3.14
 
 WORKDIR /app
 
+COPY requirements.txt req.txt
+
+RUN pip install -r req.txt
+
 COPY . .
 
-RUN pip install -r requirements.txt
-
-EXPOSE 5000
+EXPOSE 8080
 
 CMD ["python", "app.py"]
