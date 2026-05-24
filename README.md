@@ -39,3 +39,8 @@
     docker ps
     docker run -p 5001:5000 projekt
     ```
+
+
+Vedran Miškić
+
+JMBAG: 0303126200
